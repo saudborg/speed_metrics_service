@@ -31,7 +31,7 @@ A few examples:
 
 ## Tech Stack
 
-- Java 11
+- Java
 - Maven
 - Spring boot
 - Lombok
