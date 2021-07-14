@@ -1,9 +1,5 @@
-package de.tonline.controller;
+package de.factorypal.sauloborges.controller;
 
-import de.tonline.exception.ServerException;
-import de.tonline.exception.UserNotFoundException;
-import de.tonline.model.response.UserPostResponse;
-import de.tonline.service.RequestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -17,18 +13,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PostControllerTest {
-	private PostController postController;
+	/*
+	private MachineDataController postController;
 
 	@BeforeEach
 	public void before() {
 		RequestService requestService = new RequestService("http://jsonplaceholder.typicode.com/", new RestTemplate());
-		postController = new PostController(requestService);
+		postController = new MachineDataController(requestService);
 	}
 
 	@Test
 	public void test_responseUser1()
 			throws InterruptedException, ExecutionException, UserNotFoundException, ServerException {
-		ResponseEntity<UserPostResponse> postsByUser = postController.getPostsByUser("1");
+		ResponseEntity<UserPostResponse> postsByUser = postController.loadDataFromCSV("1");
 		assertNotNull(postsByUser);
 		assertEquals(postsByUser.getStatusCode(), HttpStatus.OK);
 		assertNotNull(postsByUser.getBody());
@@ -39,7 +36,7 @@ class PostControllerTest {
 	@Test
 	public void test_responseUser10()
 			throws InterruptedException, ExecutionException, UserNotFoundException, ServerException {
-		ResponseEntity<UserPostResponse> postsByUser = postController.getPostsByUser("10");
+		ResponseEntity<UserPostResponse> postsByUser = postController.loadDataFromCSV("10");
 		assertNotNull(postsByUser);
 		assertEquals(postsByUser.getStatusCode(), HttpStatus.OK);
 		assertNotNull(postsByUser.getBody());
@@ -53,11 +50,13 @@ class PostControllerTest {
 
 	@Test
 	public void test_responseUser33_doesnt_exists() {
-		assertThrows(UserNotFoundException.class, () -> postController.getPostsByUser("33"));
+		assertThrows(UserNotFoundException.class, () -> postController.loadDataFromCSV("33"));
 	}
 
 	@Test
 	public void test_responseUserString() {
-		assertThrows(UserNotFoundException.class, () -> postController.getPostsByUser("anyValueNotLong"));
+		assertThrows(UserNotFoundException.class, () -> postController.loadDataFromCSV("anyValueNotLong"));
 	}
+
+	 */
 }

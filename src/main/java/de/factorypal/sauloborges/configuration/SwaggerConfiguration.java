@@ -1,4 +1,4 @@
-package de.tonline.configuration;
+package de.factorypal.sauloborges.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,12 +20,12 @@ public class SwaggerConfiguration {
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(getApiInfo()).select()
-				.apis(RequestHandlerSelectors.any()).paths(regex("/posts.*")).build();
+				.apis(RequestHandlerSelectors.any()).paths(regex("/machine.*")).build();
 	}
 
 	private ApiInfo getApiInfo() {
-		return new ApiInfoBuilder().title("Async Fetch Api")
-				.description("A simple api to provide multiple request and merge the result")
+		return new ApiInfoBuilder().title("Speed Metrics Service")
+				.description("An API to provide data from parameters for different machines")
 				.contact(new Contact("Saulo Borges", "", "saudborg@gmail.com")).build();
 	}
 }
