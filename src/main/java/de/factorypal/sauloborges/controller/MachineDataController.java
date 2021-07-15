@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -61,7 +62,7 @@ public class MachineDataController {
 	@ApiResponses(
 			value = { @ApiResponse(code = 200, message = "Successful retrieval", response = MachineResponse.class) })
 	@RequestMapping(value = "/machine/{machineKey}", method = RequestMethod.GET)
-	public ResponseEntity<Machine> getMachine(@RequestParam final String machineKey) throws MachineNotFoundException {
+	public ResponseEntity<Machine> getMachine(@PathVariable final String machineKey) throws MachineNotFoundException {
 		return ResponseEntity.ok(machineDataService.getMachineByKey(machineKey));
 	}
 
@@ -69,7 +70,7 @@ public class MachineDataController {
 	@ApiResponses(
 			value = { @ApiResponse(code = 200, message = "Successful retrieval", response = MachineResponse.class) })
 	@RequestMapping(value = "/machine/{machineKey}/lastestParameters", method = RequestMethod.GET)
-	public ResponseEntity<MachineResponse> getLastParametersPerMachine(@RequestParam final String machineKey)
+	public ResponseEntity<MachineResponse> getLastParametersPerMachine(@PathVariable final String machineKey)
 			throws MachineNotFoundException {
 		final MachineResponse response = machineDataService.getMachineResponseLatestParamater(machineKey);
 		return ResponseEntity.ok(response);
@@ -79,7 +80,7 @@ public class MachineDataController {
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Successful retrieval", response = MachineSummaryResponse.class) })
 	@RequestMapping(value = "/machine/summary/{minutes}", method = RequestMethod.GET)
-	public ResponseEntity<List<MachineSummaryResponse>> getLastParametersPerMachine(@RequestParam final int minutes) {
+	public ResponseEntity<List<MachineSummaryResponse>> getLastParametersPerMachine(@PathVariable final int minutes) {
 
 		List<MachineSummaryResponse> machineSummaryResponses =
 				machineDataService.summaryAllMachinesFromTheLastMinutes(minutes);

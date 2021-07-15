@@ -14,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -31,22 +30,26 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class MachineDataServiceTest {
 
 	private MachineDataService machineDataService;
-	@Mock
+
 	private MachineRepository machineRepository;
 
 	@BeforeEach
 	public void before() {
+		machineRepository = mock(MachineRepository.class);
 		machineDataService = new MachineDataService(machineRepository);
 	}
 
 	@Test
 	public void testParseAndStoreParameter() throws ExecutionException, InterruptedException {
+
+
 		final Map<String, Long> parameters = createMapParameters(2);
 		final Machine machine = createMachine();
 		when(machineRepository.findById("machineKey")).thenReturn(Optional.of(machine));
@@ -81,7 +84,8 @@ public class MachineDataServiceTest {
 		final Machine machine = createMachine();
 		final ParametersValues parametersValues = new ParametersValues();
 		Parameter parameter = createParameter(1, "par" + 1, 1, Calendar.getInstance().getTime());
-		parametersValues.getParameterList().add(parameter);;
+		parametersValues.getParameterList().add(parameter);
+		;
 
 		machine.getParametersMap().put("par1", parametersValues);
 		when(machineRepository.findById("machineKey")).thenReturn(Optional.of(machine));
@@ -140,7 +144,8 @@ public class MachineDataServiceTest {
 		parametersValues.getParameterList().add(createParameter(1, "par1", 10, yesterday.getTime()));
 		parametersValues.getParameterList().add(createParameter(2, "par1", 2, Calendar.getInstance().getTime()));
 		machine.getParametersMap().put("par1", parametersValues);
-		MachineResponse machineResponseLatestParameter = machineDataService.getMachineResponseLatestParamater(machine.getKey());
+		MachineResponse machineResponseLatestParameter =
+				machineDataService.getMachineResponseLatestParamater(machine.getKey());
 		assertNotNull(machineResponseLatestParameter);
 		assertEquals(machineResponseLatestParameter.getName(), machine.getName());
 		assertEquals(machineResponseLatestParameter.getParameters().size(), 1);
@@ -166,7 +171,8 @@ public class MachineDataServiceTest {
 		par2Values.getParameterList().add(createParameter(5, "par2", 24, yesterday.getTime()));
 		machine.getParametersMap().put("par2", par2Values);
 
-		MachineResponse machineResponseLatestParameter = machineDataService.getMachineResponseLatestParamater(machine.getKey());
+		MachineResponse machineResponseLatestParameter =
+				machineDataService.getMachineResponseLatestParamater(machine.getKey());
 		assertNotNull(machineResponseLatestParameter);
 		assertEquals(machineResponseLatestParameter.getName(), machine.getName());
 		assertEquals(machineResponseLatestParameter.getParameters().size(), 2);
@@ -230,7 +236,6 @@ public class MachineDataServiceTest {
 		par1Values.getParameterList().add(createParameter(5, "par1", 1, todayMinus20.getTime()));
 		machine.getParametersMap().put("par1", par1Values);
 
-
 		when(machineRepository.findAll()).thenReturn(Arrays.asList(machine));
 		List<MachineSummaryResponse> machineSummaryResponses =
 				machineDataService.summaryAllMachinesFromTheLastMinutes(10);
@@ -262,7 +267,6 @@ public class MachineDataServiceTest {
 		par1Values.getParameterList().add(createParameter(5, "par1", 1, todayMinus20.getTime()));
 		machine.getParametersMap().put("par1", par1Values);
 
-
 		when(machineRepository.findAll()).thenReturn(Arrays.asList(machine));
 		List<MachineSummaryResponse> machineSummaryResponses =
 				machineDataService.summaryAllMachinesFromTheLastMinutes(10);
@@ -289,7 +293,6 @@ public class MachineDataServiceTest {
 		par2Values.getParameterList().add(createParameter(2, "par1", 1, Calendar.getInstance().getTime()));
 		machine2.getParametersMap().put("par1", par2Values);
 
-
 		when(machineRepository.findAll()).thenReturn(Arrays.asList(machine, machine2));
 		List<MachineSummaryResponse> machineSummaryResponses =
 				machineDataService.summaryAllMachinesFromTheLastMinutes(1);
@@ -313,7 +316,8 @@ public class MachineDataServiceTest {
 	@Test
 	public void getMachineResponseLatestParamater_invalidKey() {
 		when(machineRepository.findById("machineKey")).thenReturn(Optional.empty());
-		assertThrows(MachineNotFoundException.class, () -> machineDataService.getMachineResponseLatestParamater("machineKey"));
+		assertThrows(MachineNotFoundException.class,
+				() -> machineDataService.getMachineResponseLatestParamater("machineKey"));
 	}
 
 	private Machine createMachine() {
@@ -330,6 +334,7 @@ public class MachineDataServiceTest {
 		}
 		return parameters;
 	}
+
 	private Parameter createParameter(final long id, final String name, final long value, final Date date) {
 		return new Parameter(id, name, value, date);
 	}

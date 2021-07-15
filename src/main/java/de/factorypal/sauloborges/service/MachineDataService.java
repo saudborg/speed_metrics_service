@@ -2,7 +2,6 @@ package de.factorypal.sauloborges.service;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import de.factorypal.sauloborges.controller.MachineDataController;
 import de.factorypal.sauloborges.exception.MachineNotFoundException;
 import de.factorypal.sauloborges.model.Machine;
 import de.factorypal.sauloborges.model.Parameter;
@@ -18,9 +17,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -46,8 +45,9 @@ public class MachineDataService {
 	}
 
 	private void readMachineDataFromCSV(final String csvPath) throws IOException, CsvException {
-		URL resource = MachineDataController.class.getResource(csvPath);
-		try (CSVReader reader = new CSVReader(new FileReader(resource.getFile()))) {
+		InputStream inputStream = this.getClass().getResourceAsStream(csvPath);
+
+		try (CSVReader reader = new CSVReader(new InputStreamReader(inputStream))) {
 			String[] header = reader.readNext();
 			List<String[]> machineEntry = reader.readAll();
 			machineEntry.forEach(entry -> {
@@ -115,7 +115,8 @@ public class MachineDataService {
 
 			machine.getParametersMap().forEach((key, value) -> {
 				List<Parameter> parametersInInterval =
-						value.getParameterList().stream().filter(p -> isInTheLastMinutes(p, minutes)).collect(Collectors.toList());
+						value.getParameterList().stream().filter(p -> isInTheLastMinutes(p, minutes))
+								.collect(Collectors.toList());
 				if (!parametersInInterval.isEmpty()) {
 					List<Long> valuesList =
 							parametersInInterval.stream().map(Parameter::getValue).collect(Collectors.toList());
@@ -127,8 +128,8 @@ public class MachineDataService {
 							ParameterSummaryResponse.builder().max(max).min(min).avg(avg).median(median).build());
 				} else {
 					// empty values
-					machineSummaryResponse.getParameterSummaryResponseList().put(key,
-							ParameterSummaryResponse.builder().max(0).min(0).avg(0).median(0).build());
+					machineSummaryResponse.getParameterSummaryResponseList()
+							.put(key, ParameterSummaryResponse.builder().max(0).min(0).avg(0).median(0).build());
 				}
 			});
 			listResponse.add(machineSummaryResponse);
